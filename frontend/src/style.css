@@ -1,0 +1,12 @@
+.background-img {
+  background-image: url("./assets/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #333;
+  padding: 1rem;
+  text-align: center;
+}
