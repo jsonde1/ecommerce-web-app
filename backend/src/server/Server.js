@@ -3,15 +3,13 @@ import cors from "cors";
 
 export default class Server {
   #app;
-  #host;
   #port;
   #routers = [];
   #server;
 
-  constructor(port, host, routers) {
+  constructor(port, routers) {
     this.#app = express();
     this.#port = port;
-    this.#host = host;
     this.#server = null;
     this.#routers = routers;
   }
@@ -21,8 +19,8 @@ export default class Server {
   };
 
   start() {
-    this.#server = this.#app.listen(this.#port, this.#host, () => {
-      console.log(`Server is listening on http://${this.#host}:${this.#port}`);
+    this.#server = this.#app.listen(this.#port, () => {
+      console.log(`Server is listening on ${this.#port}`);
     });
     this.#app.use(cors());
     this.#app.use(express.json({ limit: "50mb" }));

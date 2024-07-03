@@ -27,5 +27,5 @@ const listingRouter = {
   startRoute: "/listings",
 };
 routers.push(userRouter, listingRouter);
-const server = new Server(port, process.env.HOST, routers);
+const server = new Server(port, routers);
 server.start();
