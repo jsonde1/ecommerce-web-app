@@ -1,5 +1,5 @@
 // Desc: User services to handle user data
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import sql from "mssql";
 export default class UserServices {
   saltRounds = 10;
