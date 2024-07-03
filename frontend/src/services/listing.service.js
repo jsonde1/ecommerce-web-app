@@ -36,7 +36,7 @@ export const addListing = async (id, listing) => {
     checkFileType(listing.image);
     listing.image = await convertBase64(listing.image);
     const res = await axios.post(
-      `http://127.0.0.1:4000/listings/add/${id}`,
+      `https://ecommerce-web-app-dlhg.onrender.com/listings/add/${id}`,
       listing,
       {
         headers: authHeader(),
@@ -58,7 +58,7 @@ export const editListing = async (id, listing) => {
     } else delete listing.MainImage;
     delete listing.editListing;
     const res = await axios.put(
-      `http://127.0.0.1:4000/listings/edit`,
+      `https://ecommerce-web-app-dlhg.onrender.com/listings/edit`,
       listing,
       {
         headers: authHeader(),
@@ -75,7 +75,7 @@ export const editListing = async (id, listing) => {
 export const deleteListing = async (id) => {
   try {
     const res = await axios.delete(
-      `http://127.0.0.1:4000/listings/delete/${id}`,
+      `https://ecommerce-web-app-dlhg.onrender.com/listings/delete/${id}`,
       {
         headers: authHeader(),
       }
@@ -90,7 +90,9 @@ export const deleteListing = async (id) => {
 };
 export const getAllListings = async () => {
   try {
-    const res = await axios.get("http://127.0.0.1:4000/listings");
+    const res = await axios.get(
+      "https://ecommerce-web-app-dlhg.onrender.com/listings"
+    );
     console.log(res.data);
     if (res.status === 200) {
       return res;
@@ -102,9 +104,12 @@ export const getAllListings = async () => {
 };
 export const getSellerListings = async (id) => {
   try {
-    const res = await axios.get(`http://127.0.0.1:4000/listings/${id}`, {
-      headers: authHeader(),
-    });
+    const res = await axios.get(
+      `https://ecommerce-web-app-dlhg.onrender.com/listings/${id}`,
+      {
+        headers: authHeader(),
+      }
+    );
     console.log(res.data);
     if (res.status === 200) {
       return res;
@@ -118,7 +123,7 @@ export const getListingsbyQuery = async (query) => {
   try {
     console.log(query);
     const res = await axios.get(
-      `http://127.0.0.1:4000/listings/search/${query}`
+      `https://ecommerce-web-app-dlhg.onrender.com/listings/search/${query}`
     );
     console.log(res.data);
     if (res.status === 200) {

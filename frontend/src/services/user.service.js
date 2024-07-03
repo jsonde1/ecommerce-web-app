@@ -5,7 +5,10 @@ import authHeader from "./auth-header";
 export const loginUser = async (credentials) => {
   try {
     console.log(credentials);
-    const res = await axios.post("http://127.0.0.1:4000/login", credentials);
+    const res = await axios.post(
+      "https://ecommerce-web-app-dlhg.onrender.com/login",
+      credentials
+    );
     if (res.status === 200) {
       Cookies.set("user", JSON.stringify(res.data.user));
       delete res.data.token;
@@ -19,7 +22,10 @@ export const loginUser = async (credentials) => {
 export const registerUser = async (user) => {
   try {
     console.log(user);
-    const res = await axios.post("http://127.0.0.1:4000/register", user);
+    const res = await axios.post(
+      "https://ecommerce-web-app-dlhg.onrender.com/register",
+      user
+    );
     if (res.status === 201) {
       return res;
     }
@@ -31,9 +37,13 @@ export const registerUser = async (user) => {
 };
 export const changePassword = async (id, passwords) => {
   try {
-    const res = await axios.put(`http://127.0.0.1:4000/user/${id}`, passwords, {
-      headers: authHeader(),
-    });
+    const res = await axios.put(
+      `https://ecommerce-web-app-dlhg.onrender.com/user/${id}`,
+      passwords,
+      {
+        headers: authHeader(),
+      }
+    );
     console.log(res.data);
     if (res.status === 200) return res;
     console.log("login failed ");
