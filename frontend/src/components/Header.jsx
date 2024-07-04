@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Collapse } from "bootstrap";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/react.svg";
+import logo from "../assets/DFBay.png";
 import Ticker from "./Ticker";
 
 const Header = ({ user, logOut }) => {
@@ -87,11 +87,7 @@ const Header = ({ user, logOut }) => {
                 </li>
                 <li className="nav-item">
                   {Object.keys(user).length > 0 && (
-                    <a
-                      href="/loginregister"
-                      className="nav-link"
-                      onClick={logOut}
-                    >
+                    <a href="/" className="nav-link" onClick={logOut}>
                       Log Out
                     </a>
                   )}

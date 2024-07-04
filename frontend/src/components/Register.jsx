@@ -41,8 +41,13 @@ const Register = ({ registerUser }) => {
     <>
       {registered && (
         <>
-          {alert("Registration successful")}
-          <Navigate to="/login" />
+          {alert("Registration successful, Please Log in to continue")}
+          {setUser({
+            name: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+          })}
         </>
       )}
       {!registered && (
