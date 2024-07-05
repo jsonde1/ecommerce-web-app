@@ -52,7 +52,7 @@ const Register = ({ registerUser }) => {
       )}
       {!registered && (
         <>
-          <h1 className="text-center">Register</h1>
+          <h1 className="display-2 text-center">Register</h1>
           <form className="container" onSubmit={sendRegister}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">

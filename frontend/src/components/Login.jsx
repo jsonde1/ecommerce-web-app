@@ -43,7 +43,7 @@ const Login = ({ loginUser }) => {
       )}
       {!loggedIn && (
         <>
-          <h1 className="text-center">Login</h1>
+          <h1 className="display-2 text-center">Login</h1>
           <form className="container" onSubmit={sendLogin}>
             <div className="mb-3">
               <label htmlFor="loginEmail" className="form-label">
