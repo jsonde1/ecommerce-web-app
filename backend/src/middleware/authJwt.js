@@ -11,12 +11,25 @@ const verifyToken = (req, res, next) => {
       return res.status(401).send({ message: `Unauthorised` });
     }
     req.userId = decoded.id;
+    req.UserType = decoded.userType;
+    console.log(req);
     next();
   });
 };
-
+const adminCheck = (req, res, next) => {
+  if (req.UserType === "admin") {
+    next();
+    return;
+  } else if (req.UserType === "standard") {
+    res.status(403).send({ message: `Request requires Admin role` });
+    return;
+  }
+  res.status(500).send({ message: "You are not logged in" });
+  return;
+};
 const authJwt = {
   verifyToken,
+  adminCheck,
 };
 
 export default authJwt;

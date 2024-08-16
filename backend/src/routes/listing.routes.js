@@ -21,6 +21,12 @@ export default class ListingRoutes {
       next();
     });
     this.#router.get("/", this.#controller.getListings);
+    this.#router.get(
+      "/provisional",
+      [authJwt.verifyToken],
+      [authJwt.adminCheck],
+      this.#controller.getProvisionalListings
+    );
     this.#router.get("/search/:query", this.#controller.getListingsbyQuery);
     this.#router.get(
       "/:id",
@@ -42,6 +48,12 @@ export default class ListingRoutes {
       [authJwt.verifyToken],
       ListingValidator.validateListing(),
       this.#controller.addListing
+    );
+    this.#router.post(
+      "/add/provisional/:id",
+      [authJwt.verifyToken],
+      ListingValidator.validateListing(),
+      this.#controller.addProvisionalListing
     );
   }
   getRouter() {

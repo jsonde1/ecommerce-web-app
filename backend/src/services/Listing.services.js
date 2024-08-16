@@ -49,16 +49,16 @@ export default class ListingServices {
     return result.recordset[0];
   }
 
-  async getListings(userID = 0) {
+  async getListings(provisional = false, userID = 0) {
     await this.#db.connect();
     const request = this.#db.poolconnection.request();
     //If userID is 0, return all listings
     //If userID is not 0, return all listings except the ones by the seller
     // Not yet implemented
-    request.input("UserID", sql.Int, userID);
-    const result = await request.query(
-      `SELECT Listings.id, Listings.Title, Listings.Condition, Listings.Description, Listings.Price, Listings.MainImage, Listings.CreationDate, Listings.UserID, Listings.Status, Users.Name, Users.PhoneNumber FROM Listings LEFT JOIN Users ON Users.id = Listings.UserID WHERE NOT Listings.UserID = @UserID;`
-    );
+    let sqlQuery = `SELECT Listings.id, Listings.Title, Listings.Condition, Listings.Description, Listings.MainImage, Listings.CreationDate, Listings.UserID, Users.Name, Users.PhoneNumber FROM Listings LEFT JOIN Users ON Users.id = Listings.UserID WHERE NOT Listings.UserID = @UserID;`;
+    if (provisional) sqlQuery = `SELECT * FROM ProvisionalListings;`;
+    else request.input("UserID", sql.Int, userID);
+    const result = await request.query(sqlQuery);
     return result.recordset;
   }
   async getListingsbyQuery(query) {
@@ -82,9 +82,18 @@ export default class ListingServices {
     );
     return result.recordset;
   }
-  async addListing(userID, { title, condition, description, price, image }) {
+
+  async addListing(
+    userID,
+    { title, condition, description, price, image },
+    provisional = false
+  ) {
+    let table = `Listings`;
+    if (provisional) {
+      table = `ProvisionalListings`;
+      image = await this.#uploadImage(image);
+    }
     await this.#db.connect();
-    image = await this.#uploadImage(image);
     const request = this.#db.poolconnection.request();
     request.input("Title", sql.NVarChar(255), title);
     request.input("Condition", sql.NVarChar(255), condition);
@@ -93,10 +102,11 @@ export default class ListingServices {
     request.input("UserID", sql.Int, userID);
     request.input("MainImage", sql.NVarChar(255), image);
     const result = await request.query(
-      `INSERT INTO Listings (Title, Condition, Description, Price, UserID, MainImage) VALUES (@Title, @Condition, @Description, @Price, @UserID, @MainImage)`
+      `INSERT INTO ${table} (Title, Condition, Description, Price, UserID, MainImage) VALUES (@Title, @Condition, @Description, @Price, @UserID, @MainImage)`
     );
     return result.rowsAffected[0];
   }
+
   async editListing({ id, Title, Condition, Description, Price, MainImage }) {
     await this.#db.connect();
     let sqlQuery = `UPDATE Listings SET Title = @Title, Condition = @Condition, Description = @Description, Price = @Price WHERE id = @ID ;`;

@@ -4,7 +4,29 @@ export default class ListingController {
   constructor(service = new ListingServices()) {
     this.#services = service;
   }
-
+  addProvisionalListing = async (req, res) => {
+    try {
+      const rowsAffected = await this.#services.addListing(
+        req.params.id,
+        req.body,
+        true
+      );
+      if (rowsAffected === 0) throw new Error("Listing not created");
+      res.status(201).send({
+        message: `Listing has been successfully created and will be published subject to approval`,
+        rowsAffected,
+      });
+    } catch (error) {
+      if (error.message === "Listing not created") {
+        return res.status(400).send({
+          message: error.message,
+        });
+      }
+      res.status(500).send({
+        message: error.message,
+      });
+    }
+  };
   addListing = async (req, res) => {
     try {
       const rowsAffected = await this.#services.addListing(
@@ -69,6 +91,22 @@ export default class ListingController {
   getListings = async (req, res) => {
     try {
       const listings = await this.#services.getListings();
+      if (listings.length === 0) throw new Error("No Listings found");
+      res.status(200).send(listings);
+    } catch (error) {
+      if (error.message === "No Listings found") {
+        return res.status(400).send({
+          message: error.message,
+        });
+      }
+      res.status(500).send({
+        message: error.message,
+      });
+    }
+  };
+  getProvisionalListings = async (req, res) => {
+    try {
+      const listings = await this.#services.getListings(true); // true for provisional listings
       if (listings.length === 0) throw new Error("No Listings found");
       res.status(200).send(listings);
     } catch (error) {
