@@ -10,9 +10,8 @@ const verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: `Unauthorised` });
     }
-    req.userId = decoded.id;
+    // if (decoded.userType !== "admin") req.userId = decoded.id;
     req.UserType = decoded.userType;
-    console.log(req);
     next();
   });
 };

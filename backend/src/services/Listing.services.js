@@ -21,7 +21,7 @@ export default class ListingServices {
     const uploadResult = await cloudinary.uploader
       .upload(image)
       .catch((error) => {
-        return error;
+        throw error;
       });
     return uploadResult.secure_url;
   }
@@ -40,12 +40,15 @@ export default class ListingServices {
       .query(`SELECT * FROM Users WHERE id = @id`);
     return result.recordset[0];
   }
-  async #findListingByID(id) {
+  async #findListingByID(id, provisional = false) {
+    let table;
+    if (provisional) table = `ProvisionalListings`;
+    else table = `Listings`;
     await this.#db.connect();
     const request = this.#db.poolconnection.request();
     const result = await request
       .input("id", sql.Int, id)
-      .query(`SELECT * FROM Listings WHERE id = @id`);
+      .query(`SELECT * FROM ${table} WHERE id = @id`);
     return result.recordset[0];
   }
 
@@ -83,26 +86,41 @@ export default class ListingServices {
     return result.recordset;
   }
 
-  async addListing(
+  async addProvisionalListing(
     userID,
-    { title, condition, description, price, image },
-    provisional = false
+    { title, condition, description, price, image }
   ) {
-    let table = `Listings`;
-    if (provisional) {
-      table = `ProvisionalListings`;
+    try {
       image = await this.#uploadImage(image);
+      await this.#db.connect();
+      const request = this.#db.poolconnection.request();
+      request.input("Title", sql.NVarChar(255), title);
+      request.input("Condition", sql.NVarChar(255), condition);
+      request.input("Description", sql.NVarChar(255), description);
+      request.input("Price", sql.Money, price);
+      request.input("UserID", sql.Int, userID);
+      request.input("MainImage", sql.NVarChar(255), image);
+      const result = await request.query(
+        `INSERT INTO ProvisionalListings (Title, Condition, Description, Price, UserID, MainImage) VALUES (@Title, @Condition, @Description, @Price, @UserID, @MainImage)`
+      );
+      return result.rowsAffected[0];
+    } catch (error) {
+      throw error;
     }
+  }
+  async addListing(id) {
     await this.#db.connect();
     const request = this.#db.poolconnection.request();
-    request.input("Title", sql.NVarChar(255), title);
-    request.input("Condition", sql.NVarChar(255), condition);
-    request.input("Description", sql.NVarChar(255), description);
-    request.input("Price", sql.Money, price);
-    request.input("UserID", sql.Int, userID);
-    request.input("MainImage", sql.NVarChar(255), image);
+    request.input("ID", sql.Int, id);
     const result = await request.query(
-      `INSERT INTO ${table} (Title, Condition, Description, Price, UserID, MainImage) VALUES (@Title, @Condition, @Description, @Price, @UserID, @MainImage)`
+      `BEGIN TRANSACTION;
+INSERT INTO Listings (Title, Condition, Description, Price, UserID, MainImage, CreationDate)
+SELECT Title, Condition, Description, Price, UserID, MainImage, CreationDate)
+FROM ProvisionalListings
+WHERE id = @ID;
+DELETE FROM ProvisionalListings
+WHERE id = @ID;
+COMMIT;`
     );
     return result.rowsAffected[0];
   }
@@ -126,19 +144,29 @@ export default class ListingServices {
     const result = await request.query(sqlQuery);
     return result.rowsAffected[0];
   }
-  async deleteListing(id) {
-    const listing = await this.#findListingByID(id);
+  async deleteListing(id, provisional = false) {
+    let listing;
+    let table;
+    console.log(provisional);
+    if (provisional) {
+      listing = await this.#findListingByID(id, true);
+      table = `ProvisionalListings`;
+    } else {
+      listing = await this.#findListingByID(id);
+      table = `Listings`;
+    }
+    console.log(listing);
     const removed = await this.#removeImage(listing.MainImage);
     if (removed.result === "ok") {
       await this.#db.connect();
       const request = this.#db.poolconnection.request();
       request.input("ID", sql.Int, id);
       const result = await request.query(
-        `DELETE FROM Listings WHERE id = @ID;`
+        `DELETE FROM ${table} WHERE id = @ID;`
       );
       console.log(`deleted item id ${id} from the database`);
       return result.rowsAffected[0];
-    } else return new Error("Image not deleted");
+    } else throw new Error("Image not deleted");
   }
 }
 

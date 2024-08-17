@@ -6,10 +6,9 @@ export default class ListingController {
   }
   addProvisionalListing = async (req, res) => {
     try {
-      const rowsAffected = await this.#services.addListing(
+      const rowsAffected = await this.#services.addProvisionalListing(
         req.params.id,
-        req.body,
-        true
+        req.body
       );
       if (rowsAffected === 0) throw new Error("Listing not created");
       res.status(201).send({
@@ -29,10 +28,7 @@ export default class ListingController {
   };
   addListing = async (req, res) => {
     try {
-      const rowsAffected = await this.#services.addListing(
-        req.params.id,
-        req.body
-      );
+      const rowsAffected = await this.#services.addListing(req.params.id);
       if (rowsAffected === 0) throw new Error("Listing not created");
       res.status(201).send({
         message: `Listing has been successfully created`,
@@ -68,10 +64,14 @@ export default class ListingController {
       });
     }
   };
-  deleteListing = async (req, res) => {
+  deleteListing = async (req, res, provisional = false) => {
     try {
-      const rowsAffected = await this.#services.deleteListing(req.params.id);
-      if (rowsAffected === 0) throw new Error("Listing not deleted");
+      let rowsAffected;
+      if (provisional)
+        rowsAffected = await this.#services.deleteListing(req.params.id, true);
+      else rowsAffected = await this.#services.deleteListing(req.params.id);
+      if (rowsAffected === 0 || rowsAffected === undefined)
+        throw new Error("Listing not deleted");
       res.status(200).send({
         message: `Listing has been successfully deleted`,
         rowsAffected,
@@ -79,7 +79,8 @@ export default class ListingController {
     } catch (error) {
       if (error.message === "Listing not deleted") {
         return res.status(400).send({
-          message: error.message,
+          message:
+            "Listing could not be removed as the image could not be deleted",
         });
       }
       res.status(500).send({
@@ -87,9 +88,13 @@ export default class ListingController {
       });
     }
   };
+  deleteProvisionalListing = async (req, res) => {
+    this.deleteListing(req, res, true);
+  };
 
   getListings = async (req, res) => {
     try {
+      req.params.id = req.userId;
       const listings = await this.#services.getListings();
       if (listings.length === 0) throw new Error("No Listings found");
       res.status(200).send(listings);

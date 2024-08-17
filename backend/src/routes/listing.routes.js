@@ -43,10 +43,16 @@ export default class ListingRoutes {
       [authJwt.verifyToken],
       this.#controller.deleteListing
     );
+    this.#router.delete(
+      "/delete/provisional/:id",
+      [authJwt.verifyToken],
+      [authJwt.adminCheck],
+      this.#controller.deleteProvisionalListing
+    );
     this.#router.post(
       "/add/:id",
       [authJwt.verifyToken],
-      ListingValidator.validateListing(),
+      [authJwt.adminCheck],
       this.#controller.addListing
     );
     this.#router.post(
