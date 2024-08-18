@@ -47,7 +47,7 @@ const AddListing = ({ appendListing }) => {
       {submitted && (
         <>
           {" "}
-          {alert("Listing has been added")}
+          {alert("Listing will be added subject to admin approval")}
           {setSubmitted(false)}
         </>
       )}

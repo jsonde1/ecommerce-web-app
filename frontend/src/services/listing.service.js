@@ -1,5 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import address from "./backend-address";
+
 const validImageTypes = [
   "image/svg",
   "image/jpeg",
@@ -7,6 +9,7 @@ const validImageTypes = [
   "image/bmp",
   "image/webp",
 ];
+
 //needed to upload to cloudinary on backend
 const convertBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -31,17 +34,30 @@ const checkFileType = (file) => {
     throw new Error("Please upload a valid image file type");
 };
 
-export const addListing = async (id, listing) => {
+export const addProvisionalListing = async (id, listing) => {
   try {
     checkFileType(listing.image);
     listing.image = await convertBase64(listing.image);
     const res = await axios.post(
-      `https://ecommerce-web-app-dlhg.onrender.com/listings/add/${id}`,
+      `${address}/listings/add/provisional/${id}`,
       listing,
       {
         headers: authHeader(),
       }
     );
+    console.log(res.data);
+    if (res.status === 201) {
+      return res;
+    }
+  } catch (e) {
+    return e;
+  }
+};
+export const addListing = async (id) => {
+  try {
+    const res = await axios.post(`${address}/listings/add/${id}`, {
+      headers: authHeader(),
+    });
     console.log(res.data);
     if (res.status === 201) {
       return res;
@@ -57,13 +73,9 @@ export const editListing = async (id, listing) => {
       listing.MainImage = await convertBase64(listing.MainImage);
     } else delete listing.MainImage;
     delete listing.editListing;
-    const res = await axios.put(
-      `https://ecommerce-web-app-dlhg.onrender.com/listings/edit`,
-      listing,
-      {
-        headers: authHeader(),
-      }
-    );
+    const res = await axios.put(`${address}/listings/edit`, listing, {
+      headers: authHeader(),
+    });
     console.log(res.data);
     if (res.status === 200) {
       return res;
@@ -74,12 +86,9 @@ export const editListing = async (id, listing) => {
 };
 export const deleteListing = async (id) => {
   try {
-    const res = await axios.delete(
-      `https://ecommerce-web-app-dlhg.onrender.com/listings/delete/${id}`,
-      {
-        headers: authHeader(),
-      }
-    );
+    const res = await axios.delete(`${address}/listings/delete/${id}`, {
+      headers: authHeader(),
+    });
     console.log(res.data);
     if (res.status === 200) {
       return res;
@@ -90,9 +99,7 @@ export const deleteListing = async (id) => {
 };
 export const getAllListings = async () => {
   try {
-    const res = await axios.get(
-      "https://ecommerce-web-app-dlhg.onrender.com/listings"
-    );
+    const res = await axios.get(`${address}/listings`);
     console.log(res.data);
     if (res.status === 200) {
       return res;
@@ -102,14 +109,26 @@ export const getAllListings = async () => {
     return e;
   }
 };
+export const getProvisionalListings = async () => {
+  try {
+    const res = await axios.get(`${address}/listings/provisional`, {
+      headers: authHeader(),
+    });
+    console.log(res.data);
+    if (res.status === 200) {
+      return res;
+    }
+    throw new Error(`No listings found`);
+  } catch (e) {
+    return e;
+  }
+};
+
 export const getSellerListings = async (id) => {
   try {
-    const res = await axios.get(
-      `https://ecommerce-web-app-dlhg.onrender.com/listings/${id}`,
-      {
-        headers: authHeader(),
-      }
-    );
+    const res = await axios.get(`${address}/listings/${id}`, {
+      headers: authHeader(),
+    });
     console.log(res.data);
     if (res.status === 200) {
       return res;
@@ -122,9 +141,7 @@ export const getSellerListings = async (id) => {
 export const getListingsbyQuery = async (query) => {
   try {
     console.log(query);
-    const res = await axios.get(
-      `https://ecommerce-web-app-dlhg.onrender.com/listings/search/${query}`
-    );
+    const res = await axios.get(`${address}/listings/search/${query}`);
     console.log(res.data);
     if (res.status === 200) {
       return res;

@@ -33,9 +33,15 @@ function App() {
   const dashboardFunctions = {
     changePassword: User.changePassword,
     getListings: Listing.getSellerListings,
-    addListing: Listing.addListing,
+    addListing: Listing.addProvisionalListing,
     editListing: Listing.editListing,
     deleteListing: Listing.deleteListing,
+  };
+  const adminFunctions = {
+    approveListing: Listing.addListing,
+    deleteListing: Listing.deleteListing,
+    getListings: Listing.getProvisionalListings,
+    admin: admin,
   };
 
   return (
@@ -64,7 +70,10 @@ function App() {
             path="/user/:id"
             element={<Dashboard functions={dashboardFunctions} />}
           />
-          <Route path="/admin" element={<AdminPage admin={admin} />} />
+          <Route
+            path="/admin"
+            element={<AdminPage functions={adminFunctions} />}
+          />
         </Routes>
       </div>
       <Footer />
