@@ -16,10 +16,9 @@ const Listing = ({
       style={{ maxWidth: "50rem" }}
     >
       <div className="card-body p-2 ">
-        <h5
-          className=" display-6 text-center"
-          style={{ fontSize: "2rem" }}
-        ></h5>
+        <h5 className=" display-6 text-center" style={{ fontSize: "2rem" }}>
+          {Title}
+        </h5>
         <p className="card-text">{Condition}</p>
         <p className="card-text">£{Price}</p>
         <p className="card-text">{Status}</p>

@@ -111,17 +111,19 @@ export default class ListingServices {
   async addListing(id) {
     await this.#db.connect();
     const request = this.#db.poolconnection.request();
+    console.log(id);
     request.input("ID", sql.Int, id);
     const result = await request.query(
       `BEGIN TRANSACTION;
 INSERT INTO Listings (Title, Condition, Description, Price, UserID, MainImage, CreationDate)
-SELECT Title, Condition, Description, Price, UserID, MainImage, CreationDate)
+SELECT Title, Condition, Description, Price, UserID, MainImage, CreationDate
 FROM ProvisionalListings
 WHERE id = @ID;
 DELETE FROM ProvisionalListings
 WHERE id = @ID;
 COMMIT;`
     );
+    console.log(result);
     return result.rowsAffected[0];
   }
 

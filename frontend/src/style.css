@@ -11,3 +11,8 @@
   padding: 1rem;
   text-align: center;
 }
+.provisional {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}

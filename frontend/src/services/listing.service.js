@@ -55,7 +55,8 @@ export const addProvisionalListing = async (id, listing) => {
 };
 export const addListing = async (id) => {
   try {
-    const res = await axios.post(`${address}/listings/add/${id}`, {
+    console.log(authHeader());
+    const res = await axios.post(`${address}/listings/add/${id}`, id, {
       headers: authHeader(),
     });
     console.log(res.data);
