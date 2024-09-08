@@ -1,6 +1,4 @@
-import React from "react";
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Login = ({ loginUser }) => {
   const [credentials, setCredentials] = useState({
@@ -8,6 +6,10 @@ const Login = ({ loginUser }) => {
     password: "",
   });
   const [loggedIn, setLoggedIn] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  useEffect(() => {
+    if (loggedIn) window.location.href = "/";
+  }, [loggedIn]);
 
   //still need to have alert pop up if login fails
   const sendLogin = async (e) => {
@@ -16,7 +18,7 @@ const Login = ({ loginUser }) => {
       const res = await loginUser(credentials);
       if (res.status === 200) setLoggedIn(true);
       else {
-        alert("Login failed");
+        setShowDangerAlert(true);
         setCredentials({
           email: "",
           password: "",
@@ -30,20 +32,25 @@ const Login = ({ loginUser }) => {
       });
     }
   };
-  {
-    /* <Navigate to={`/user/${response.data._id}`} /> */
-  }
   return (
     <>
-      {loggedIn && (
-        <>
-          {alert("Login successful")}
-          <Navigate to="/" />
-        </>
-      )}
       {!loggedIn && (
         <>
           <h1 className="display-2 text-center">Login</h1>
+          {showDangerAlert && (
+            <div
+              className="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              Login failed. Please check your credentials and try again.
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={() => setShowDangerAlert(false)}
+              ></button>
+            </div>
+          )}
           <form className="container" onSubmit={sendLogin}>
             <div className="mb-3">
               <label htmlFor="loginEmail" className="form-label">
