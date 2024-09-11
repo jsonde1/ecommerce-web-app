@@ -2,7 +2,7 @@ import SearchForm from "../components/SearchForm";
 import { useState } from "react";
 import Listings from "../components/Listings";
 
-const MainSearch = ({ getListings }) => {
+const MainSearch = ({ getListings, user }) => {
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
   const [showInfoAlert, setShowInfoAlert] = useState(true); // Add a state to handle alert visibility
@@ -36,7 +36,14 @@ const MainSearch = ({ getListings }) => {
             </div>
           )}
 
-          <h2 className="display-2 text-center mb-5">Welcome to DFBay</h2>
+          {!user && (
+            <h2 className="display-2 text-center mb-5">Welcome to DFBay</h2>
+          )}
+          {user && (
+            <h2 className="display-2 text-center mb-5">
+              Welcome to DFBay, <br /> {user.Name}
+            </h2>
+          )}
           <div
             className="card mx-auto p-2 bg-secondary text-light"
             style={{ maxWidth: "40rem" }}

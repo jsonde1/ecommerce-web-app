@@ -21,7 +21,7 @@ function App() {
     if (user) {
       setCurrentUser(user);
       setAdmin(user.UserType === "admin");
-      console.log(user.UserType);
+      console.log(user);
     }
   }, []);
   const logOut = () => {
@@ -60,7 +60,12 @@ function App() {
           />
           <Route
             path="/"
-            element={<MainSearch getListings={Listing.getListingsbyQuery} />}
+            element={
+              <MainSearch
+                getListings={Listing.getListingsbyQuery}
+                user={currentUser}
+              />
+            }
           />
           <Route
             path="/listings"

@@ -4,6 +4,8 @@ import Listing from "../components/Listing";
 
 const AdminPage = ({ functions }) => {
   const [provisionalListings, setProvisionalListings] = useState([]);
+  const [showApproveAlert, setShowApproveAlert] = useState(false);
+  const [showRejectAlert, setShowRejectAlert] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   useEffect(() => {
     const fetchListings = async () => {
@@ -16,7 +18,9 @@ const AdminPage = ({ functions }) => {
   }, []);
   const addListing = async (id) => {
     await functions.approveListing(id);
-    alert("Listing has been approved.");
+    setShowRejectAlert(false);
+    setShowApproveAlert(true);
+    setTimeout(() => setShowApproveAlert(false), 5000);
     const newListings = provisionalListings.filter(
       (listing) => listing.id !== id
     );
@@ -24,7 +28,9 @@ const AdminPage = ({ functions }) => {
   };
   const deleteListing = async (id) => {
     await functions.deleteListing(id);
-    alert("Listing has been deleted.");
+    setShowApproveAlert(false);
+    setShowRejectAlert(true);
+    setTimeout(() => setShowRejectAlert(false), 5000);
     const newListings = provisionalListings.filter(
       (listing) => listing.id !== id
     );
@@ -34,6 +40,34 @@ const AdminPage = ({ functions }) => {
     <>
       {functions.admin && (
         <>
+          {showApproveAlert && (
+            <div
+              className="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              Listing has been approved.
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={() => setShowApproveAlert(false)}
+              ></button>
+            </div>
+          )}
+          {showRejectAlert && (
+            <div
+              className="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              Listing has been deleted.
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={() => setShowRejectAlert(false)}
+              ></button>
+            </div>
+          )}
           <div className="container ">
             <h2>Provisional Listings</h2>
             {hasLoaded &&

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const ModifyListing = (props) => {
   const id = useParams();
@@ -7,39 +7,78 @@ const ModifyListing = (props) => {
   const [modifiedListing, setModifiedListing] = useState(props.listing);
   const [imageModified, setImageModified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailedAlert, setShowFailedAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const sendListing = async (e) => {
     e.preventDefault();
     try {
+      // remove image property if new image is not uploaded
       if (!imageModified) delete modifiedListing.MainImage;
       const res = await modifiedListing.modifyListing(id.id, modifiedListing);
       if (res.status === 200) {
-        setSubmitted(true);
         setAlertMessage("Listing has been modified");
+        setShowSuccessAlert(true);
       }
     } catch (e) {
-      alert(e.message);
+      setAlertMessage(e.message);
+      setShowFailedAlert(true);
     }
+    alertTimeout();
   };
+
+  const alertTimeout = () =>
+    setTimeout(() => {
+      setShowSuccessAlert(false);
+      setShowFailedAlert(false);
+      setAlertMessage("");
+    });
+
   const deleteListing = async (e) => {
     e.preventDefault();
     try {
       const res = await modifiedListing.deleteListing(modifiedListing.id);
-      if (res.status === 200) setSubmitted(true);
-      setAlertMessage("Listing has been deleted");
+      if (res.status === 200) {
+        setAlertMessage("Listing has been deleted");
+        setShowSuccessAlert(true);
+      }
     } catch (e) {
-      alert(e.message);
+      setAlertMessage(e.message);
+      setShowFailedAlert(true);
     }
+    alertTimeout();
   };
   return (
     <>
-      {submitted && (
+      {showFailedAlert && (
         <>
-          {" "}
-          {alert(alertMessage)}
-          {setSubmitted(false)}
-          {setAlertMessage("")}
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            {alertMessage}
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => setShowFailedAlert(false)}
+            ></button>
+          </div>
         </>
+      )}
+      {showSuccessAlert && (
+        <div
+          className="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          {alertMessage}
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setShowSuccessAlert(false)}
+          ></button>
+        </div>
       )}
       {!submitted && (
         <form

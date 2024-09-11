@@ -1,6 +1,5 @@
-import React from "react";
 import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { changePassword } from "../services/user.service";
 
 const ChangePassword = (passwordChange) => {
@@ -11,22 +10,26 @@ const ChangePassword = (passwordChange) => {
     newPassword: "",
   });
   const [changed, setChanged] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailedAlert, setShowFailedAlert] = useState(false);
 
   //still need to have alert pop up if login fails
   const sendPassword = async (e) => {
     e.preventDefault();
     try {
-      if (!credentials.newPassword) {
-        return alert("cant be empty");
-      }
       const res = await changePassword(id.id, credentials);
-      if (res.status === 200) setChanged(true);
+      if (res.status === 200) setShowSuccessAlert(true);
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+      }, 5000);
       setCredentials({
         currentPassword: "",
         newPassword: "",
       });
     } catch (e) {
       console.log(e);
+      setShowFailedAlert(true);
+      setTimeout(() => setShowFailedAlert(false), 5000);
       setCredentials({
         currentPassword: "",
         newPassword: "",
@@ -35,12 +38,35 @@ const ChangePassword = (passwordChange) => {
   };
   return (
     <>
-      {changed && (
+      {showFailedAlert && (
         <>
-          {" "}
-          {alert("Password Changed")}
-          {setChanged(false)}
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            Failed to update password
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => setShowFailedAlert(false)}
+            ></button>
+          </div>
         </>
+      )}
+      {showSuccessAlert && (
+        <div
+          className="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          Password has been successfully changed.
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setShowSuccessAlert(false)}
+          ></button>
+        </div>
       )}
       {!changed && (
         <form className="container" onSubmit={sendPassword}>
@@ -51,7 +77,7 @@ const ChangePassword = (passwordChange) => {
               name="password"
               id="currentpassword"
               className="form-control"
-              placeholder="current Password"
+              placeholder="Current Password"
               value={credentials.currentPassword}
               onChange={(e) =>
                 setCredentials({
@@ -70,7 +96,7 @@ const ChangePassword = (passwordChange) => {
               name="password"
               id="newpassword"
               className="form-control"
-              placeholder="new Password"
+              placeholder="New Password"
               value={credentials.newPassword}
               onChange={(e) =>
                 setCredentials({ ...credentials, newPassword: e.target.value })

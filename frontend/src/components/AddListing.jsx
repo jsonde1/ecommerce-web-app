@@ -1,6 +1,5 @@
-import React from "react";
 import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const AddListing = ({ appendListing }) => {
   const id = useParams();
@@ -12,18 +11,17 @@ const AddListing = ({ appendListing }) => {
     price: 0,
     image: null,
   });
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailedAlert, setShowFailedAlert] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   //still need to have alert pop up if login fails
   const sendListing = async (e) => {
     e.preventDefault();
     try {
-      if (!listing.title) {
-        return alert("cant be empty");
-      }
       const res = await appendListing(id.id, listing);
-      if (res.status === 201) setSubmitted(true);
-      console.log(listing);
+      if (res.status === 201) setShowSuccessAlert(true);
+      setTimeout(() => setShowSuccessAlert(false), 5000);
       setListing({
         title: "",
         condition: options[0],
@@ -33,6 +31,8 @@ const AddListing = ({ appendListing }) => {
       });
     } catch (e) {
       console.log(e);
+      setShowFailedAlert(true);
+      setTimeout(() => setShowFailedAlert(false), 5000);
       setListing({
         title: "",
         condition: "",
@@ -44,12 +44,36 @@ const AddListing = ({ appendListing }) => {
   };
   return (
     <>
-      {submitted && (
+      {showFailedAlert && (
         <>
-          {" "}
-          {alert("Listing will be added subject to admin approval")}
-          {setSubmitted(false)}
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            Failed to upload listing
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => setShowFailedAlert(false)}
+            ></button>
+          </div>
         </>
+      )}
+      {showSuccessAlert && (
+        <div
+          className="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          Listing has been uploaded and will be made live subject to admin
+          approval
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setShowSuccessAlert(false)}
+          ></button>
+        </div>
       )}
       {!submitted && (
         <form className="container" onSubmit={sendListing}>
