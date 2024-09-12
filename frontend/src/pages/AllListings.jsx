@@ -3,11 +3,10 @@ import Listings from "../components/Listings";
 
 const AllListings = ({ getAllListings }) => {
   const [listings, setListings] = useState([]);
-  const [loaded, setLoaded] = useState(false);
   const [showInfoAlert, setShowInfoAlert] = useState(true);
   useEffect(() => {
     const fetchListings = async () => {
-      const listings = await getAllListings().then(setLoaded(true));
+      const listings = await getAllListings();
       setListings(listings.data);
     };
     fetchListings();
@@ -31,7 +30,7 @@ const AllListings = ({ getAllListings }) => {
       )}
 
       <Listings data={listings} />
-      {!loaded && (
+      {!listings && (
         <div className="lds-container">
           <div className="lds-roller">
             <div></div>
