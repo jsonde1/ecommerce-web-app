@@ -58,7 +58,7 @@ export default class ListingServices {
     //If userID is 0, return all listings
     //If userID is not 0, return all listings except the ones by the seller
     // Not yet implemented
-    let sqlQuery = `SELECT Listings.id, Listings.Title, Listings.Condition, Listings.Description, Listings.MainImage, Listings.CreationDate, Listings.UserID, Users.Name, Users.PhoneNumber FROM Listings LEFT JOIN Users ON Users.id = Listings.UserID WHERE NOT Listings.UserID = @UserID;`;
+    let sqlQuery = `SELECT Listings.id, Listings.Title, Listings.Condition, Listings.Description, Listings.Price, Listings.MainImage, Listings.CreationDate, Listings.UserID, Users.Name, Users.PhoneNumber FROM Listings LEFT JOIN Users ON Users.id = Listings.UserID WHERE NOT Listings.UserID = @UserID;`;
     if (provisional) sqlQuery = `SELECT * FROM ProvisionalListings;`;
     else request.input("UserID", sql.Int, userID);
     const result = await request.query(sqlQuery);

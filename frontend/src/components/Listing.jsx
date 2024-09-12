@@ -1,5 +1,3 @@
-import logo from "../assets/react.svg";
-
 const Listing = ({
   Title,
   Condition,
@@ -12,7 +10,7 @@ const Listing = ({
 }) => {
   return (
     <div
-      className="card d-flex flex-row mx-auto bg-secondary gap-3"
+      className="card d-flex flex-row mx-auto bg-secondary mt-3 gap-3"
       style={{ maxWidth: "50rem" }}
     >
       <div className="card-body p-2 ">
