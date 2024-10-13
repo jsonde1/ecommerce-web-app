@@ -1,26 +1,72 @@
 import Listing from "./Listing";
+import Checkbox from "./CheckBox";
+import { useState, useEffect } from "react";
+
 const Listings = ({ data }) => {
-  console.log(data);
-  const listings = data
-    ? data.map((listing) => {
-        return (
-          <Listing
-            key={listing.id}
-            Title={listing.Title}
-            Condition={listing.Condition}
-            Description={listing.Description}
-            Price={listing.Price}
-            MainImage={listing.MainImage}
-            Name={listing.Name}
-            PhoneNumber={listing.PhoneNumber}
-            Status={listing.Status}
-          />
-        );
-      })
-    : null;
+  const [priceCheck, setPriceCheck] = useState(false);
+  const [statusCheck, setStatusCheck] = useState(false);
+  const [sortedData, setSortedData] = useState([]);
+
+  useEffect(() => {
+    let sortedListings = [...data];
+
+    if (priceCheck) {
+      sortedListings.sort(
+        (listingA, listingB) => listingA.Price - listingB.Price
+      );
+    } else if (statusCheck) {
+      sortedListings.sort((listingA, listingB) =>
+        listingA.Status.localeCompare(listingB.Status)
+      );
+    } else {
+      sortedListings.sort(
+        (listingA, listingB) =>
+          new Date(listingA.CreationDate) - new Date(listingB.CreationDate)
+      );
+    }
+
+    setSortedData(sortedListings);
+  }, [data, priceCheck, statusCheck]);
+
+  const handlePriceCheck = () => {
+    setStatusCheck(false); // Uncheck the status checkbox when price is checked
+    setPriceCheck(!priceCheck);
+  };
+
+  const handleStatusCheck = () => {
+    setPriceCheck(false); // Uncheck the price checkbox when status is checked
+    setStatusCheck(!statusCheck);
+  };
+
+  const listings = sortedData.map((listing) => (
+    <Listing
+      key={listing.id}
+      Title={listing.Title}
+      Condition={listing.Condition}
+      Description={listing.Description}
+      Price={listing.Price}
+      MainImage={listing.MainImage}
+      Name={listing.Name}
+      PhoneNumber={listing.PhoneNumber}
+      Status={listing.Status}
+    />
+  ));
+
   return (
     <div className="container">
       <h2 className="display-2 text-center">Listings</h2>
+      <div>
+        <Checkbox
+          label="Price"
+          value={priceCheck}
+          onChange={handlePriceCheck}
+        />
+        <Checkbox
+          label="Status"
+          value={statusCheck}
+          onChange={handleStatusCheck}
+        />
+      </div>
       {listings}
     </div>
   );
