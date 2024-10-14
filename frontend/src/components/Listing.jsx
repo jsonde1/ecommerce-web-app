@@ -17,12 +17,23 @@ const Listing = ({
         <h5 className=" display-6 text-center" style={{ fontSize: "2rem" }}>
           {Title}
         </h5>
-        <p className="card-text">{Condition}</p>
-        <p className="card-text">£{Price}</p>
-        <p className="card-text">{Status}</p>
+        <p className="card-text">
+          <b>Condition:</b> {Condition}
+        </p>
+
+        <p className="card-text">
+          <b>Price:</b> £{Price}
+        </p>
+        <p className="card-text">
+          <b>Status:</b> {Status}
+        </p>
+        <p className="card-text">
+          <b>Seller's Name:</b> {Name}
+        </p>
+        <p className="card-text">
+          <b>Seller's Phone Number:</b> {PhoneNumber}
+        </p>
         <p className="card-text">{Description}</p>
-        <p className="card-text">{Name}</p>
-        <p className="card-text">{PhoneNumber}</p>
       </div>
       <img
         className=""

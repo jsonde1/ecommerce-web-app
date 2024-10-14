@@ -8,7 +8,7 @@ const Listings = ({ data }) => {
   const [sortedData, setSortedData] = useState([]);
 
   useEffect(() => {
-    let sortedListings = [...data];
+    let sortedListings = [...data]; // Copy the data array to avoid mutating the original data
 
     if (priceCheck) {
       sortedListings.sort(
@@ -55,17 +55,21 @@ const Listings = ({ data }) => {
   return (
     <div className="container">
       <h2 className="display-2 text-center">Listings</h2>
-      <div>
-        <Checkbox
-          label="Price"
-          value={priceCheck}
-          onChange={handlePriceCheck}
-        />
-        <Checkbox
-          label="Status"
-          value={statusCheck}
-          onChange={handleStatusCheck}
-        />
+      <div className="text-center">
+        <p>
+          Sort by: &nbsp;
+          <Checkbox
+            label="Price"
+            value={priceCheck}
+            onChange={handlePriceCheck}
+          />
+          &nbsp;
+          <Checkbox
+            label="Status"
+            value={statusCheck}
+            onChange={handleStatusCheck}
+          />
+        </p>
       </div>
       {listings}
     </div>
