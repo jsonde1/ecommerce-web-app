@@ -5,6 +5,10 @@
   background-attachment: fixed;
   min-height: 100vh;
 }
+.listings-image {
+  margin: auto;
+  display: block;
+}
 
 .header {
   background-color: #333;

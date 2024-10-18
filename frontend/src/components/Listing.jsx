@@ -17,30 +17,38 @@ const Listing = ({
         <h5 className=" display-6 text-center" style={{ fontSize: "2rem" }}>
           {Title}
         </h5>
-        <p className="card-text">
-          <b>Condition:</b> {Condition}
-        </p>
+        <div className="row">
+          <div className="col-4">
+            <p className="card-text">
+              <b>Condition:</b> {Condition}
+            </p>
 
-        <p className="card-text">
-          <b>Price:</b> £{Price}
-        </p>
-        <p className="card-text">
-          <b>Status:</b> {Status}
-        </p>
-        <p className="card-text">
-          <b>Seller's Name:</b> {Name}
-        </p>
-        <p className="card-text">
-          <b>Seller's Phone Number:</b> {PhoneNumber}
-        </p>
-        <p className="card-text">{Description}</p>
+            <p className="card-text">
+              <b>Price:</b> £{Price}
+            </p>
+            <p className="card-text">
+              <b>Status:</b> {Status}
+            </p>
+            <p className="card-text">
+              <b>Name:</b> {Name}
+            </p>
+            <p className="card-text">
+              <b>Phone Number:</b> {PhoneNumber}
+            </p>
+          </div>
+          <div className="col-4">
+            <p className="card-text">{Description}</p>
+          </div>
+          <div className="col-4">
+            <img
+              className="listings-image"
+              src={MainImage}
+              alt="Card image cap"
+              style={{ width: "200px", height: "200px" }}
+            />
+          </div>
+        </div>
       </div>
-      <img
-        className=""
-        src={MainImage}
-        alt="Card image cap"
-        style={{ width: "200px" }}
-      />
     </div>
   );
 };
