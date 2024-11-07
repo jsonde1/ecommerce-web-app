@@ -3,6 +3,7 @@ import { Collapse } from "bootstrap";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/DFBay.png";
 import Ticker from "./Ticker";
+import ReactTicker from "./ReactTicker";
 
 const Header = ({ user, logOut }) => {
   const collapseMenu = useRef();
@@ -96,7 +97,7 @@ const Header = ({ user, logOut }) => {
             </div>
           </div>
         </nav>
-        <Ticker />
+        <ReactTicker />
       </header>
     </>
   );

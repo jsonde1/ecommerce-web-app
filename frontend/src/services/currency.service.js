@@ -14,10 +14,17 @@ export const getCurrencies = async () => {
         aud: res.data.gbp.aud,
         cad: res.data.gbp.cad,
         ngn: res.data.gbp.ngn,
+        chf: res.data.gbp.chf,
+        jod: res.data.gbp.jod,
+        rub: res.data.gbp.rub,
+        qar: res.data.gbp.qar,
+        hkd: res.data.gbp.hkd,
+        sar: res.data.gbp.sar,
+        cnh: res.data.gbp.cnh,
       };
       return currenciesList;
     }
-    throw new Error(`Login failed`);
+    throw new Error(`Unable to fetch currencies: ${res.status}`);
   } catch (e) {
     return e;
   }
