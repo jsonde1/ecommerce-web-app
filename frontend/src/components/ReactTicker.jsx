@@ -7,7 +7,6 @@ const ReactTicker = () => {
     const fetchData = async () => {
       const data = await getCurrencies();
       setCurrencies(data);
-      console.log(data);
     };
     fetchData();
   }, []);

@@ -85,13 +85,44 @@ export default class ListingServices {
     );
     return result.recordset;
   }
+  async addImageToDB(image, listingID) {
+    await this.#db.connect();
+    const request = this.#db.poolconnection.request();
+    request.input("ImageURL", sql.NVarChar(255), image);
+    request.input("ListingID", sql.Int, listingID);
+    const result = await request.query(
+      `INSERT INTO Images (ImageURL, ListingID) VALUES (@ImageURL, @ListingID);`
+    );
+    return result.rowsAffected[0];
+  }
 
+  async addImagesToCloud(images) {
+    //Array to store the uploaded images in case of an error
+    let uploadedImages = [];
+    //temporarily start from 1 to skip the first image
+    for (let i = 1; i < images.length; i++) {
+      try {
+        images[i] = await this.#uploadImage(images[i]);
+        uploadedImages.push(images[i]);
+      } catch (error) {
+        //If an error occurs, remove all the images that have been uploaded
+        for (let j = 0; j < uploadedImages.length; j++)
+          await this.#removeImage(uploadedImages[j]);
+        uploadedImages = [];
+        break;
+      }
+    }
+    return uploadedImages;
+  }
   async addProvisionalListing(
     userID,
-    { title, condition, description, price, image }
+    { title, condition, description, price, images }
   ) {
     try {
-      image = await this.#uploadImage(image);
+      images = await this.addImagesToCloud(images);
+      //Checks that at least one image has been uploaded
+      if (images.length === 0)
+        throw new Error("Image not uploaded or incorrect file type");
       await this.#db.connect();
       const request = this.#db.poolconnection.request();
       request.input("Title", sql.NVarChar(255), title);
@@ -99,10 +130,12 @@ export default class ListingServices {
       request.input("Description", sql.NVarChar(255), description);
       request.input("Price", sql.Money, price);
       request.input("UserID", sql.Int, userID);
-      request.input("MainImage", sql.NVarChar(255), image);
+      request.input("MainImage", sql.NVarChar(255), images[0]);
       const result = await request.query(
-        `INSERT INTO ProvisionalListings (Title, Condition, Description, Price, UserID, MainImage) VALUES (@Title, @Condition, @Description, @Price, @UserID, @MainImage)`
+        `INSERT INTO ProvisionalListings (Title, Condition, Description, Price, UserID, MainImage) OUTPUT INSERTED.* VALUES (@Title, @Condition, @Description, @Price, @UserID, @MainImage);`
       );
+      for (let i = 0; i < images.length; i++)
+        await this.addImageToDB(images[i], result.recordset[0].id);
       return result.rowsAffected[0];
     } catch (error) {
       throw error;

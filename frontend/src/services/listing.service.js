@@ -36,8 +36,11 @@ const checkFileType = (file) => {
 
 export const addProvisionalListing = async (id, listing) => {
   try {
-    checkFileType(listing.image);
-    listing.image = await convertBase64(listing.image);
+    for (let i = 0; i < listing.images.length; i++) {
+      checkFileType(listing.images[i]);
+      listing.images[i] = await convertBase64(listing.images[i]);
+    }
+    console.log(listing);
     const res = await axios.post(
       `${address}/listings/add/provisional/${id}`,
       listing,
@@ -46,9 +49,7 @@ export const addProvisionalListing = async (id, listing) => {
       }
     );
     console.log(res.data);
-    if (res.status === 201) {
-      return res;
-    }
+    if (res.status === 201) return res;
   } catch (e) {
     return e;
   }

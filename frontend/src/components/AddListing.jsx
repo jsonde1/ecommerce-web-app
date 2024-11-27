@@ -9,11 +9,12 @@ const AddListing = ({ appendListing }) => {
     condition: options[0],
     description: "",
     price: 0,
-    image: null,
+    images: [],
   });
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailedAlert, setShowFailedAlert] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [previews, setPreviews] = useState([]);
 
   //still need to have alert pop up if login fails
   const sendListing = async (e) => {
@@ -27,7 +28,7 @@ const AddListing = ({ appendListing }) => {
         condition: options[0],
         description: "",
         price: 0,
-        image: null,
+        images: [],
       });
     } catch (e) {
       console.log(e);
@@ -35,10 +36,10 @@ const AddListing = ({ appendListing }) => {
       setTimeout(() => setShowFailedAlert(false), 5000);
       setListing({
         title: "",
-        condition: "",
-        description: options[0],
-        price: "",
-        image: null,
+        condition: options[0],
+        description: "",
+        price: 0,
+        images: [],
       });
     }
   };
@@ -158,10 +159,11 @@ const AddListing = ({ appendListing }) => {
               accept="image/*"
               id="image"
               className="form-control"
+              multiple
               onChange={(e) =>
                 setListing({
                   ...listing,
-                  image: e.target.files[0],
+                  images: [...e.target.files],
                 })
               }
               required
