@@ -45,7 +45,7 @@ const Listings = ({ data }) => {
       Condition={listing.Condition}
       Description={listing.Description}
       Price={listing.Price}
-      MainImage={listing.MainImage}
+      MainImage={listing.Images[0].ImageURL}
       Name={listing.Name}
       PhoneNumber={listing.PhoneNumber}
       Status={listing.Status}

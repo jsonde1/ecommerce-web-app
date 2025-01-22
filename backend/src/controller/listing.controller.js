@@ -97,6 +97,12 @@ export default class ListingController {
       req.params.id = req.userId;
       const listings = await this.#services.getListings();
       if (listings.length === 0) throw new Error("No Listings found");
+      const images = await this.#services.getImagesURL();
+      for (let i = 0; i < listings.length; i++) {
+        listings[i].Images = images.filter(
+          (image) => image.ListingID === listings[i].id
+        );
+      }
       res.status(200).send(listings);
     } catch (error) {
       if (error.message === "No Listings found") {

@@ -64,6 +64,15 @@ export default class ListingServices {
     const result = await request.query(sqlQuery);
     return result.recordset;
   }
+  async getImagesURL() {
+    //returns all images in images table
+    await this.#db.connect();
+    const request = this.#db.poolconnection.request();
+    const sqlQuery = `SELECT * FROM Images;`;
+    const result = await request.query(sqlQuery);
+    return result.recordset;
+  }
+
   async getListingsbyQuery(query) {
     await this.#db.connect();
     const request = this.#db.poolconnection.request();
