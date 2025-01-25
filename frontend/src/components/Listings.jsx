@@ -41,11 +41,12 @@ const Listings = ({ data }) => {
   const listings = sortedData.map((listing) => (
     <Listing
       key={listing.id}
+      ID={listing.id}
       Title={listing.Title}
       Condition={listing.Condition}
       Description={listing.Description}
       Price={listing.Price}
-      MainImage={listing.Images[0].ImageURL}
+      Images={listing.Images}
       Name={listing.Name}
       PhoneNumber={listing.PhoneNumber}
       Status={listing.Status}
