@@ -8,6 +8,9 @@ const port = parseInt(process.env.AZURE_SQL_PORT);
 const user = process.env.AZURE_SQL_USER;
 const password = process.env.AZURE_SQL_PASSWORD;
 const serverPORT = process.env.PORT;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 export const config = {
   server,
   port,
@@ -18,4 +21,9 @@ export const config = {
   options: {
     encrypt: true,
   },
+};
+export const cloudinaryConfig = {
+  apiKey,
+  apiSecret,
+  cloudName,
 };

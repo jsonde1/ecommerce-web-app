@@ -1,6 +1,7 @@
 // Desc: User services to handle user data
 import bcrypt from "bcryptjs";
 import sql from "mssql";
+import { cloudinaryConfig } from "../../config/Config.js";
 
 export default class ListingServices {
   saltRounds = 10;
@@ -8,11 +9,10 @@ export default class ListingServices {
   constructor(db) {
     this.#db = db;
     // Configuration
-    // Needs to be moved somewhere else
     cloudinary.config({
-      cloud_name: "dfbay",
-      api_key: "484727296952679",
-      api_secret: "0x9DqnsA4cGyfwx7JnKqO2IW7L8",
+      cloud_name: cloudinaryConfig.cloudName,
+      api_key: cloudinaryConfig.apiKey,
+      api_secret: cloudinaryConfig.apiSecret,
     });
   }
 
