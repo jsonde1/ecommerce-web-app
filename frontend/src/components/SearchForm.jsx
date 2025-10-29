@@ -14,21 +14,30 @@ const SearchForm = ({ getListings }) => {
     <>
       <form
         aria-label="form"
-        className="d-flex flex-column mt-4"
+        className="d-flex flex-column mt-4 p-4"
         onSubmit={submitListingQuery}
       >
-        <input
-          type="text"
-          id="listingQuery"
-          name="query"
-          placeholder="Search for ..."
-          value={query}
-          onChange={handleInputChange}
-          className="form-control"
-          required
-        />
-        <div className="form-group align-self-center mt-4">
-          <input type="submit" className="btn btn-dark" value="Search" />
+        <div className="mb-3">
+          <label htmlFor="listingQuery" className="form-label fw-semibold mb-2">
+            What are you looking for?
+          </label>
+          <input
+            type="text"
+            id="listingQuery"
+            name="query"
+            placeholder="Enter item name..."
+            value={query}
+            onChange={handleInputChange}
+            className="form-control form-control-lg"
+            required
+          />
+        </div>
+        <div className="form-group align-self-center">
+          <input
+            type="submit"
+            className="btn btn-dark btn-lg px-5 py-3 shadow"
+            value="🔍 Search Items"
+          />
         </div>
       </form>
     </>

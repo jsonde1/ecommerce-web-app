@@ -12,10 +12,11 @@ const AllListings = ({ getAllListings }) => {
     fetchListings();
   }, []);
   return (
-    <div>
+    <div className="container py-4">
       {showInfoAlert && (
         <div
-          className="alert alert-info alert-dismissible fade show"
+          className="alert alert-info alert-dismissible fade show mx-auto"
+          style={{ maxWidth: "800px" }}
           role="alert"
         >
           Please note that first time loading may take up to 60 seconds as the

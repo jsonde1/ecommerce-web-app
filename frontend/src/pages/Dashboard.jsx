@@ -18,31 +18,41 @@ const Dashboard = ({ functions }) => {
     fetchListings();
   }, [functions, id.id]);
   return (
-    <>
-      <h1 className="display-1 text-center mb-5">
-        <u>Dashboard</u>
-      </h1>
-      <div className="mx-auto" style={{ maxWidth: "50rem" }}>
-        <h3 className="display-3 text-center">Change Password</h3>
-        <ChangePassword passwordChange={functions.changePassword} />
+    <div className="container">
+      <h1 className="display-1 text-center mb-5 text-white">Dashboard</h1>
+
+      <div className="mx-auto mb-5" style={{ maxWidth: "60rem" }}>
+        <div className="card shadow-lg mb-4">
+          <div className="card-body p-4">
+            <h3 className="h3 fw-bold mb-4 text-primary">Change Password</h3>
+            <ChangePassword passwordChange={functions.changePassword} />
+          </div>
+        </div>
       </div>
-      <div className="mx-auto" style={{ maxWidth: "50rem" }}>
-        <h3 className="display-3 text-center">Add Listing</h3>
-        <AddListing appendListing={functions.addListing} />
+
+      <div className="mx-auto mb-5" style={{ maxWidth: "60rem" }}>
+        <div className="card shadow-lg mb-4">
+          <div className="card-body p-4">
+            <h3 className="h3 fw-bold mb-4 text-primary">Add New Listing</h3>
+            <AddListing appendListing={functions.addListing} />
+          </div>
+        </div>
       </div>
+
       <div
-        className=" d-flex flex-column mx-auto gap-3 p-4"
-        style={{ maxWidth: "50rem" }}
+        className="d-flex flex-column mx-auto gap-4 mb-5"
+        style={{ maxWidth: "60rem" }}
       >
-        <h3 className="display-3 text-center">My Listings</h3>
+        <h3 className="h3 fw-bold text-center text-white mb-4">My Listings</h3>
         {hasLoaded &&
+          listings &&
           listings.map((listing) => {
             listing.modifyListing = functions.editListing;
             listing.deleteListing = functions.deleteListing;
             return <ModifyListing key={listing.id} listing={listing} />;
           })}
       </div>
-    </>
+    </div>
   );
 };
 

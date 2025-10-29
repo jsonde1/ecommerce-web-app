@@ -39,13 +39,19 @@ const AdminPage = ({ functions }) => {
   return (
     <>
       {functions.admin && (
-        <>
+        <div className="container py-4">
+          <h1 className="display-2 text-center mb-5 text-white">Admin Panel</h1>
+          <h2 className="text-center mb-4 text-white h3">
+            Review Provisional Listings
+          </h2>
+
           {showApproveAlert && (
             <div
-              className="alert alert-success alert-dismissible fade show"
+              className="alert alert-success alert-dismissible fade show mx-auto mb-4"
+              style={{ maxWidth: "800px" }}
               role="alert"
             >
-              Listing has been approved.
+              ✓ Listing has been approved and is now live.
               <button
                 type="button"
                 className="btn-close"
@@ -56,10 +62,11 @@ const AdminPage = ({ functions }) => {
           )}
           {showRejectAlert && (
             <div
-              className="alert alert-success alert-dismissible fade show"
+              className="alert alert-danger alert-dismissible fade show mx-auto mb-4"
+              style={{ maxWidth: "800px" }}
               role="alert"
             >
-              Listing has been deleted.
+              ✗ Listing has been rejected and deleted.
               <button
                 type="button"
                 className="btn-close"
@@ -68,42 +75,51 @@ const AdminPage = ({ functions }) => {
               ></button>
             </div>
           )}
-          <div className="container ">
-            <h2>Provisional Listings</h2>
+
+          <div
+            className="d-flex flex-column gap-4"
+            style={{ maxWidth: "70rem", margin: "0 auto" }}
+          >
             {hasLoaded &&
               provisionalListings.map((listing) => {
                 return (
-                  <div className="provisional" key={listing.id}>
-                    <div className="p-2 flex-fill">
+                  <div key={listing.id} className="card shadow-lg">
+                    <div className="card-body p-0">
                       <Listing
+                        ID={listing.id}
                         Title={listing.Title}
                         Condition={listing.Condition}
                         Description={listing.Description}
                         Price={listing.Price}
-                        MainImage={listing.MainImage}
+                        Images={
+                          listing.Images || [
+                            { ImageURL: listing.MainImage || "" },
+                          ]
+                        }
                         Name={listing.Name}
                         PhoneNumber={listing.PhoneNumber}
+                        Status={listing.Status}
                       />
                     </div>
-                    <div className="d-flex gap-3 justify-content-around">
+                    <div className="card-footer d-flex gap-3 justify-content-center p-3 bg-light">
                       <button
                         onClick={() => addListing(listing.id)}
-                        className="btn btn-primary"
+                        className="btn btn-success btn-lg px-5"
                       >
-                        Approve
+                        ✓ Approve Listing
                       </button>
                       <button
                         onClick={() => deleteListing(listing.id)}
-                        className="btn btn-danger"
+                        className="btn btn-danger btn-lg px-5"
                       >
-                        Reject
+                        ✗ Reject Listing
                       </button>
                     </div>
                   </div>
                 );
               })}
           </div>
-        </>
+        </div>
       )}
 
       {!functions.admin && (

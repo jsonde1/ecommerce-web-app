@@ -97,6 +97,7 @@ export default class ListingController {
       req.params.id = req.userId;
       const listings = await this.#services.getListings();
       if (listings.length === 0) throw new Error("No Listings found");
+      //should probably be done in the service
       const images = await this.#services.getImagesURL();
       for (let i = 0; i < listings.length; i++) {
         listings[i].Images = images.filter(
@@ -137,6 +138,13 @@ export default class ListingController {
         req.params.query
       );
       if (listings.length === 0) throw new Error("No Listings found");
+      //should probably be done in the service/duplicate code
+      const images = await this.#services.getImagesURL();
+      for (let i = 0; i < listings.length; i++) {
+        listings[i].Images = images.filter(
+          (image) => image.ListingID === listings[i].id
+        );
+      }
       res.status(200).send(listings);
     } catch (error) {
       if (error.message === "No Listings found") {

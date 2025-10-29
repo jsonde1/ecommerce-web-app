@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#--skip-worktree applied to backend/src/services/backend-address.js

@@ -15,18 +15,78 @@ const Ticker = () => {
       <div className="ticker-container">
         <div className="ticker-wrapper">
           <div className="ticker-transition">
-            <div className="ticker-item">GBP/USD {currencies.usd}</div>
-            <div className="ticker-item">GBP/EUR {currencies.eur}</div>
-            <div className="ticker-item">GBP/JPY {currencies.jpy}</div>
-            <div className="ticker-item">GBP/AUD {currencies.aud}</div>
-            <div className="ticker-item">GBP/CAD {currencies.cad}</div>
-            <div className="ticker-item">GBP/NGN {currencies.ngn}</div>
-            <div className="ticker-item">GBP/USD {currencies.usd}</div>
-            <div className="ticker-item">GBP/EUR {currencies.eur}</div>
-            <div className="ticker-item">GBP/JPY {currencies.jpy}</div>
-            <div className="ticker-item">GBP/AUD {currencies.aud}</div>
-            <div className="ticker-item">GBP/CAD {currencies.cad}</div>
-            <div className="ticker-item">GBP/NGN {currencies.ngn}</div>
+            <div className="ticker-item">
+              GBP/USD{" "}
+              <strong>
+                {currencies.usd ? parseFloat(currencies.usd).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/EUR{" "}
+              <strong>
+                {currencies.eur ? parseFloat(currencies.eur).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/JPY{" "}
+              <strong>
+                {currencies.jpy ? parseFloat(currencies.jpy).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/AUD{" "}
+              <strong>
+                {currencies.aud ? parseFloat(currencies.aud).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/CAD{" "}
+              <strong>
+                {currencies.cad ? parseFloat(currencies.cad).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/NGN{" "}
+              <strong>
+                {currencies.ngn ? parseFloat(currencies.ngn).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/USD{" "}
+              <strong>
+                {currencies.usd ? parseFloat(currencies.usd).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/EUR{" "}
+              <strong>
+                {currencies.eur ? parseFloat(currencies.eur).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/JPY{" "}
+              <strong>
+                {currencies.jpy ? parseFloat(currencies.jpy).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/AUD{" "}
+              <strong>
+                {currencies.aud ? parseFloat(currencies.aud).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/CAD{" "}
+              <strong>
+                {currencies.cad ? parseFloat(currencies.cad).toFixed(3) : "---"}
+              </strong>
+            </div>
+            <div className="ticker-item">
+              GBP/NGN{" "}
+              <strong>
+                {currencies.ngn ? parseFloat(currencies.ngn).toFixed(3) : "---"}
+              </strong>
+            </div>
           </div>
         </div>
       </div>

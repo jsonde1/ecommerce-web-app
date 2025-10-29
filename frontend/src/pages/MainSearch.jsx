@@ -9,8 +9,12 @@ const MainSearch = ({ getListings, user }) => {
 
   const getListingHandler = async (query) => {
     const listings = await getListings(query);
+
+    console.log(
+      "Listing search results(Stringified): " + JSON.stringify(listings.data)
+    );
     setData(listings.data);
-    console.log("sadf" + JSON.stringify(listings));
+    console.log("Listing search results(data): " + JSON.stringify(data));
     setSubmitted(true);
   };
 
@@ -37,18 +41,20 @@ const MainSearch = ({ getListings, user }) => {
           )}
 
           {!user && (
-            <h2 className="display-2 text-center mb-5">Welcome to DFBay</h2>
+            <h2 className="display-2 text-center mb-5 text-white">
+              Welcome to DFBay
+            </h2>
           )}
           {user && (
-            <h2 className="display-2 text-center mb-5">
-              Welcome to DFBay, <br /> {user.Name}
+            <h2 className="display-2 text-center mb-5 text-white">
+              Welcome back, {user.Name}! 👋
             </h2>
           )}
           <div
-            className="card mx-auto p-2 bg-secondary text-light"
-            style={{ maxWidth: "40rem" }}
+            className="card mx-auto p-4 shadow-lg"
+            style={{ maxWidth: "50rem" }}
           >
-            <h3 className="display-4">Search...</h3>
+            <h3 className="display-4 text-center mb-4">Search for Items</h3>
             <SearchForm getListings={getListingHandler} />
           </div>
         </>

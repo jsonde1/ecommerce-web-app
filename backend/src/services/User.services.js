@@ -31,6 +31,7 @@ export default class UserServices {
     const match = await bcrypt.compare(password, user.Password);
     if (match) {
       //remove password hash and UserType for security
+      console.log(user);
       delete user.Password;
       return user;
     }

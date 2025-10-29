@@ -18,8 +18,8 @@ const Header = ({ user, logOut }) => {
 
   return (
     <>
-      <header className="bg-secondary">
-        <nav className="navbar navbar-expand-lg navbar-dark ">
+      <header>
+        <nav className="navbar navbar-expand-lg navbar-dark shadow">
           <div className="container-fluid ">
             <a
               href="/"
